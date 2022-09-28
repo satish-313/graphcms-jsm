@@ -1,19 +1,18 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-
 import { Categories, PostCard, PostWidget } from "../components";
+import { getPosts } from "../services";
+import { Post } from "../typing";
 
-interface postType {
-  title: string;
-  excerpt: string;
+interface Node {
+  node: Post;
 }
 
-const posts: postType[] = [
-  { title: "react testing:", excerpt: "learn react testing" },
-  { title: "react with tailwindcss", excerpt: "Learn react with tailwind" },
-];
+interface PostType {
+  nodes: Node[];
+}
 
-const Home: NextPage = () => {
+const Home: NextPage<PostType> = ({ nodes }) => {
   return (
     <div className="container mx-auto px-10 mb-8">
       <Head>
@@ -22,13 +21,13 @@ const Home: NextPage = () => {
       </Head>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-        <div className="lg:col-span-8 col-span-1 bg-red-400">
-          {posts.map((post: postType) => (
-            <PostCard post={post} key={post.title} />
+        <div className="lg:col-span-8 col-span-1">
+          {nodes.map(({node},idx) => (
+            <PostCard post={node} key={idx} />
           ))}
         </div>
 
-        <div className="lg:col-span-4 col-span-1 bg-lime-400">
+        <div className="lg:col-span-4 col-span-1 ">
           <div className="lg:sticky relative top-8">
             <PostWidget />
             <Categories />
@@ -38,5 +37,10 @@ const Home: NextPage = () => {
     </div>
   );
 };
+
+export async function getStaticProps() {
+  const nodes = (await getPosts()) || [];
+  return { props: { nodes } };
+}
 
 export default Home;
