@@ -1,20 +1,15 @@
-import { useContext } from "react";
-import { NextPage } from "next";
+import { useContext, useState, useEffect } from "react";
 import Link from "next/link";
+import { getCategories } from "../services";
+import { category } from "../typing";
 
-interface categoriesType {
-  name: string;
-  slug: string;
-}
+const Header = () => {
+  const [categories, setCategories] = useState([]);
 
-const Categories: categoriesType[] = [
-  { name: "react", slug: "react" },
-  { name: "web development", slug: "web-development" },
-];
+  useEffect(() => {
+    getCategories().then((newCategories) => setCategories(newCategories));
+  }, []);
 
-interface Props {}
-
-const Header: NextPage<Props> = () => {
   return (
     <div className="container mx-auto px-10 mb-8">
       <div className="border-b w-full inline-block border-blue-400 py-8">
@@ -27,7 +22,7 @@ const Header: NextPage<Props> = () => {
         </div>
 
         <div className="hidden md:float-left md:contents">
-          {Categories.map((category) => (
+          {categories.map((category:category) => (
             <Link key={category.slug} href={`/category/${category.slug}`}>
               <span className="md:float-right mt-2 align-middle text-white ml-4 font-semibold cursor-pointer">
                 {category.name}
@@ -36,7 +31,7 @@ const Header: NextPage<Props> = () => {
           ))}
         </div>
       </div>
-    </div> 
+    </div>
   );
 };
 
