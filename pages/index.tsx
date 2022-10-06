@@ -8,11 +8,11 @@ interface Node {
   node: Post;
 }
 
-interface PostType {
+interface Props {
   nodes: Node[];
 }
 
-const Home: NextPage<PostType> = ({ nodes }) => {
+const Home: NextPage<Props> = ({ nodes }) => {
   return (
     <div className="container mx-auto px-10 mb-8">
       <Head>

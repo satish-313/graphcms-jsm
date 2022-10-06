@@ -6,21 +6,23 @@ import { NextPage } from "next";
 import { getRecentPost, getSimilarPosts } from "../services";
 
 interface Props {
-  categories ?: category[];
-  slug ?: string
+  categories?: category[];
+  slug?: string;
 }
 
-const PostWidget: NextPage<Props> = ({categories,slug}) => {
+const PostWidget: NextPage<Props> = ({ categories, slug }) => {
   const [relatedPosts, setRelatedPosts] = useState([]);
 
   useEffect(() => {
-    if(slug && categories) {
-      getSimilarPosts(slug, categories).then((result) => setRelatedPosts(result))
-    }
-    else{
-      getRecentPost().then((result) => setRelatedPosts(result))
-    }
-  },[slug])
+    // if (slug && categories ) {
+    //   getSimilarPosts(slug, categories).then((result) =>
+    //     setRelatedPosts(result)
+    //   );
+    // } else {
+    //   getRecentPost().then((result) => setRelatedPosts(result));
+    // }
+    getRecentPost().then((result) => setRelatedPosts(result));
+  }, [slug]);
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-8 mb-8">
@@ -39,9 +41,15 @@ const PostWidget: NextPage<Props> = ({categories,slug}) => {
             />
           </div>
           <div className="flex-grow ml-4 ">
-            <p className="text-gray-500 font-xs">{moment(post.createdAt).format("MMM DD, YYYY")}</p>
+            <p className="text-gray-500 font-xs">
+              {moment(post.createdAt).format("MMM DD, YYYY")}
+            </p>
           </div>
-          <Link href={`/post/${post.slug}`} key={post.title} className="text-md">
+          <Link
+            href={`/post/${post.slug}`}
+            key={post.title}
+            className="text-md"
+          >
             {post.title}
           </Link>
         </div>
